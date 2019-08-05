@@ -1,0 +1,7 @@
+---
+- name: use FTPserver role playbook
+  hosts: ftpserver
+  user: ansible
+  become: true
+  roles:
+    - FTP_server

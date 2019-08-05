@@ -1,0 +1,10 @@
+---
+- name: use load_balancers role playbook
+  hosts: balancer7
+  user: ansible
+  become: true
+  roles:
+    - load_balancers
+  
+
+

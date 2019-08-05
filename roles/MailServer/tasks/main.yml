@@ -1,0 +1,101 @@
+---
+- name: template etc_host file
+  template:
+    src: etc_hosts.j2
+    dest: /etc/hosts
+
+- name: template selinux file 
+  template:
+    src: selinux.j2
+    dest: /etc/selinux/config
+
+- name: install epel-release
+  yum:
+    name: epel-release
+    state: latest
+  
+- firewalld:
+    zone: public
+    port: 80/tcp
+    permanent: yes
+    state: enabled 
+
+- name: install postfix
+  yum:
+    name: postfix
+    state: latest
+
+- name: template postfix file
+  template:
+    src: postfix_main.cf.j2
+    dest: /etc/postfix/main.cf
+
+- name: Start the postfix
+  service:
+    name: postfix
+    state: started
+
+- name: enable the postfix
+  service:
+    name: postfix
+    enabled: yes
+
+- name: install telnet
+  yum:
+    name: telnet
+    state: latest
+
+- name: install dovecot
+  yum:
+    name: dovecot
+    state: latest
+
+- name: template dovecot file
+  template:
+    src: dovecot.conf.j2
+    dest: /etc/dovecot/dovecot.conf
+
+- name: template 10-mail.conf file
+  template:
+    src: 10-mail.conf.j2 
+    dest: /etc/dovecot/conf.d/10-mail.conf
+  
+- name: template 10-auth.conf file
+  template:
+    src: 10-auth.conf.j2
+    dest: /etc/dovecot/conf.d/10-auth.conf
+
+- name: template 10-master.conf file
+  template:
+    src: 10-master.conf.j2 
+    dest: /etc/dovecot/conf.d/10-master.conf
+
+- name: Start the dovecot
+  service:
+    name: dovecot
+    state: started
+
+- name: enable the postfix
+  service:
+    name: dovecot
+    enabled: yes
+
+- name: install squirrelmail
+  yum:
+    name: squirrelmail
+    state: latest
+
+- name: template httpd file
+  template:
+    src: httpd.conf.j2 
+    dest: /etc/httpd/conf/httpd.conf
+
+- name: Start the httpd
+  service:
+    name: httpd
+    state: started
+
+- name: enable the httpd
+  service:
+    name: httpd
+    enabled: yes

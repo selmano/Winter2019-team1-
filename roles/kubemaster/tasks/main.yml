@@ -1,0 +1,24 @@
+---
+
+- name:
+  command: "swapoff -a"
+
+- name:
+  lineinfile:
+    path: /etc/selinux/config
+    regexp: '^SELINUX='
+    line: SELINUX=disabled
+
+- name:
+  lineinfile:
+    path: /etc/fstab
+    regexp: '^/dev/mapper/centos-swap'
+    line: #/dev/mapper/centos-swap swap                    swap    defaults        0 0
+
+
+- name: install dovecot
+  yum:
+    name: dovecot
+    state: latest
+
+

@@ -1,0 +1,13 @@
+---
+#tasks file for database6
+ - name: install database7 packages 
+   yum:
+     name: ['httpd', 'MariaDB-server', 'php-mysql', 'MariaDB-client', 'phpMyAdmin', 'epel-release', 'http://rpms.remirepo.net/enterprise/remi-release-7.rpm', 'mod_ssl', 'php',  'phpmyadmin']
+     state: latest
+ - name: phpMyAdmin config
+   template:
+     src: phpMyAdmin.conf.j2
+     dest: /etc/httpd/conf.d/
+   notify: 
+     - start MariaDB   
+

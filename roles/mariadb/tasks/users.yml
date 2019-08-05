@@ -1,0 +1,14 @@
+#Task file for mariadb users.yml
+#
+---
+
+  - namme: Remove anonymous users
+    mysql_user:
+      name: ''
+      host_all: true
+      login_user: root
+      login_password: "{{ mariadb_root_password }}"
+      state: absent
+    tags: mariadb
+
+

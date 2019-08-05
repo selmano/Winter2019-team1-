@@ -1,0 +1,9 @@
+---
+
+- name: use loadbalancers6 role playbook
+  hosts: balancer6
+  user: ansible
+  become: true
+  roles:
+    - loadbalancers6
+

@@ -1,0 +1,12 @@
+---
+# tasks file for database6
+ - name: ensure apache is at the latest version
+   yum: 
+     name: ['httpd', 'mysql', 'php-mysql', 'mysql-server', 'phpMyAdmin', 'epel-release', 'libselinux-python'] 
+     state: latest
+ - name: phpMyAdmin config
+   template: 
+     src: phpMyAdmin.conf.j2
+     dest: /etc/httpd/conf.d/
+
+

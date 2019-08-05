@@ -1,0 +1,7 @@
+---
+# handlers file for nagios_server
+
+  - name: restart nagios
+    service:
+      name: nagios
+      state: restarted

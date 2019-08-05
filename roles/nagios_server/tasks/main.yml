@@ -1,0 +1,13 @@
+---
+# tasks file for nagios_server
+
+ 
+  - name: Generate the nagios monitoring templates
+    template: 
+      src: "{{ item }}" 
+      dest: /usr/local/nagios/etc/servers/{{ item | basename | regex_replace('\.j2','') }}
+    with_fileglob:
+      - ../templates/*.j2
+    notify:
+      - restart nagios
+    

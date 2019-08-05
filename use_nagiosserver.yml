@@ -1,0 +1,18 @@
+---
+  - hosts: all
+    gather_facts: yes
+    tasks:
+    - debug: var=ansible_all_ipv4_addresses
+    - set_fact: 
+        man_ip: "{{ item }}"
+      with_items: "{{ ansible_all_ipv4_addresses }}"
+      when: "item.startswith('192.168.41')"
+    - debug: var=man_ip
+
+
+  - name: use nagios_server role
+    hosts: nagios
+    user: ansible
+    become: true
+    roles:
+      - nagios_server

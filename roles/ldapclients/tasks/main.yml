@@ -1,0 +1,59 @@
+---
+
+- name: Install all initial packets
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - openldap-clients
+    - nss-pam-ldapd
+    - sssd
+
+- name: LDAP Authentication | Enable LDAP PAM modules
+  command: "authconfig --enableldap --enableldapauth --ldapserver=prdx-ldap11.ziyotek1.local --ldapbasedn='dc=ziyotek1,dc=local' --enablemkhomedir --update" 
+
+- name: Install NFS initial packages
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - nfs-utils
+    - autofs 
+  
+- name: Autofs files
+  command: "showmount -e prdx-ldap11.ziyotek1.local"
+
+- name: Configure auto.master file
+  template:
+    src: auto.master.j2
+    dest: /etc/auto.master
+
+- name: Create auto.home file
+  file:
+    path: /etc/auto.home
+    state: touch   
+
+- name: Configure auto.home file
+  template:
+    src: auto.home.j2
+    dest: /etc/auto.home
+
+- name: start autofs service
+  service:
+    name: autofs
+    state: started
+
+- name: enable the autofs service
+  service:
+    name: autofs
+    enabled: yes
+
+- name: Configure pam file
+  template:
+    src: password-auth-ac.j2
+    dest: /etc/pam.d/password-auth-ac
+  notify: 
+    - restart sshd 
+    - restart autofs 
+    - restart nslcd 
+

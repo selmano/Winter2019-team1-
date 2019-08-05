@@ -1,0 +1,7 @@
+---
+- name: use MailServer role playbook
+  hosts: MailServer
+  user: ansible
+  become: true
+  roles:
+    - MailServer

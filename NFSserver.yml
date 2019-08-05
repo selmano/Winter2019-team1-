@@ -1,0 +1,7 @@
+---
+- name: use NFSserver role playbook
+  hosts: NFSserver
+  user: ansible
+  become: true
+  roles:
+    - NFS_server

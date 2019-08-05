@@ -1,0 +1,7 @@
+---
+- name: use Dns_clients role playbook
+  hosts: kubemaster
+  user: ansible
+  become: true
+  roles:
+    - Dns_clients

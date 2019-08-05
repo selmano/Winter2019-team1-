@@ -1,0 +1,8 @@
+---
+- name: use LdapClients role playbook
+  hosts: kubemaster
+  user: ansible
+  become: true
+  roles:
+    - ldapclients 
+

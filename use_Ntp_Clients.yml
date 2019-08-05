@@ -1,0 +1,8 @@
+---
+- name: use NTp_Clients role playbook
+  hosts: kubemaster
+  user: ansible
+  become: true
+  roles:
+    - Ntp_Clients
+

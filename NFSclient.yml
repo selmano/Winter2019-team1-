@@ -1,0 +1,7 @@
+---
+- name: use NFSclient role playbook
+  hosts: kubemaster
+  user: ansible
+  become: true
+  roles:
+    - NFS_client

@@ -1,0 +1,12 @@
+---
+# Role default lower priority variables
+
+#nfs_client_mounts: []
+
+#nfs_client_mounts_defaults: {}
+
+#nfs_client_mounts_create_paths: yes
+
+#nfs_client_load_mounts_from_hostvars: no
+
+#nfs_client_create_src_dir: no

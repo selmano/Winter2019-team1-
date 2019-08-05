@@ -1,0 +1,64 @@
+---
+
+- name: Install all initial packages
+  yum:
+    name: nfs-utils
+    state: latest
+
+- name: start rpcbind service
+  service:
+    name: rpcbind
+    state: started
+
+- name: enable rpcbind service
+  service:
+    name: rpcbind
+    enabled: yes
+
+- name: start nfs service
+  service:
+    name: nfs
+    state: started
+
+- name: enable nfs service
+  service:
+    name: nfs
+    enabled: yes
+
+- name: Create share directory
+  file:
+    path: /var/nfsshare
+    state: directory
+    owner: nfsnobody
+    group: nfsnobody
+    mode: 0755
+
+- name:
+  lineinfile:
+    path: /etc/exports
+    line: '/var/nfsshare *(rw,sync,no_subtree_check,no_root_squash)'
+
+- name: Share the directory
+  command: exportfs -a
+
+- name: Enable firewalld
+  service: name=firewalld state=started enabled=yes
+
+- firewalld:
+    service: nfs
+    permanent: yes
+    state: enabled
+
+- firewalld:
+    service: mountd
+    permanent: yes
+    state: enabled
+
+- firewalld:
+    service: rpc-bind
+    permanent: yes
+    state: enabled
+ 
+- name: Reload firewalld
+  command: firewall-cmd --reload
+

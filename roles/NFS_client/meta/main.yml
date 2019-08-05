@@ -1,0 +1,23 @@
+
+---
+# Role dependencies
+
+#galaxy_info:
+#role_name: nfs_client
+#author: your name
+#description: Manage nfs_client
+#company: your company
+#license: GPLv3 or EUPL
+#min_ansible_version: 2.7
+#platforms:
+#-name: EL
+#versions:
+#-6
+#-7
+#-name: Fedora
+#versions:
+#-29
+#-30
+#galaxy_tags: []
+
+#dependencies: []

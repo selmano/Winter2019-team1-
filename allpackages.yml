@@ -1,0 +1,7 @@
+---
+- name: use packages_for_allboxes  role playbook
+  hosts: ftpserver
+  user: ansible
+  become: true
+  roles:
+    - packages_for_allboxes

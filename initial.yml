@@ -1,0 +1,50 @@
+---
+- name: install initial packages on all servers
+  hosts: all
+  remote_user: ansible
+  become: yes
+ 
+  tasks:
+  - name: install all initial packages
+    yum:
+      name: ['man', 'man-pages', 'mlocate', 'vim', 'bind-utils']
+      state: latest
+ 
+  - name: install chrony
+    yum:
+      name: chrony
+      state: latest
+
+  - name: configure chrony
+    template:
+      src: /ansible/templates/chrony.conf.j2
+      dest: /etc/chrony.conf
+    notify: restart chronyd
+
+  - name: start chrony service
+    service:
+      name: chronyd
+      state: started
+
+  handlers:
+    - name: restart chronyd
+      service:
+        name: chronyd
+        state: restarted
+ 
+  - name: configure network dns
+    template:
+      src: /ansible/templates/resolv.conf.j2
+      dest: /etc/resolv.conf
+    notify: restart network
+
+  - name: start network service
+    service:
+      name: network
+      state: started
+
+  handlers:
+    - name: restart network
+      service:
+        name: network
+        state: restarted 

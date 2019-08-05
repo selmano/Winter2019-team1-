@@ -1,0 +1,20 @@
+---
+# tasks file for iptables
+
+- name: load ip_tables kernel module
+  command: iptables -L -n
+
+- name: initial save iptables generate files
+  command: /sbin/service iptables save
+  args:
+    warn: no 
+
+- name: start and enable iptables service
+  service:
+    name: iptables
+    state: started
+    enabled: true
+
+- name: open TCP 80 outbound
+  command: /sbin/iptables -I INPUT 1 -p tcp --dport http -j ACCEPT -m comment --comment "Apache"
+  become: yes

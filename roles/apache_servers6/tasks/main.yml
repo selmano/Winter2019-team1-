@@ -1,0 +1,28 @@
+---
+# tasks file for apache_servers
+
+- name: install httpd 
+  yum:
+    name: httpd
+    state: latest
+
+- name: start and enable httpd service
+  service:
+    name: httpd
+    state: started
+    enabled: true 
+
+- name: deliver html content
+  copy:
+    src: html/
+    dest: "/var/www/html/index.html"
+
+- name: template host file
+  template:
+    src: host.conf.j2
+    dest: "/etc/httpd/conf/httpd.conf"
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart httpd

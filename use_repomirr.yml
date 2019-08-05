@@ -1,0 +1,9 @@
+---
+
+  - name: use repomirror role
+    hosts: ftpserver 
+    user: ansible
+    become: true
+    roles:
+      - repo_mirror
+

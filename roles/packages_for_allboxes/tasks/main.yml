@@ -1,0 +1,6 @@
+---
+- name: Packages for all boxes
+  yum: 
+    name: [ 'bind-utils', 'man', 'man-pages', 'mlocate', 'sysstat' ]
+    state: latest
+

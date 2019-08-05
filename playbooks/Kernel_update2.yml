@@ -1,0 +1,24 @@
+---
+- name: Update Kernel
+  hosts: kernel
+  remote_user: ansible
+  become: yes
+
+  tasks:
+    - name: Update the software package repository
+      yum:
+        name: "*"
+        update_cache: yes
+    - name: Install dependencies
+      package:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - yum-utils
+
+    - name: Download Kernel repo
+      command: yum-config-manager --add-repo=http://mirror.centos.org/centos/$releasever/updates/$basearch/
+  
+    
+
+

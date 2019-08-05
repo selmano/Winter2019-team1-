@@ -1,0 +1,107 @@
+---
+
+- name: install initial packages on all boxes
+  hosts: nagios
+  remote_user: ansible
+  become: yes
+  
+  tasks:
+  - name: install all initial packages
+    yum:
+      name: ['gcc', 'python-passlib', 'glibc', 'glibc-common', 'gd', 'gd-devel', 'make', 'net-snmp', 'openssl-devel', 'php', 'unzip', 'mariadb-server', 'httpd', 'php-mysql' ]
+      state: latest
+  
+  - name: Ensure group "nagcmd" exists
+    group:
+      name: nagcmd
+      state: present
+
+  - name: Ensure group "nagios" exists
+    group:
+      name: nagios
+      state: present
+
+  - name: add nagios users 
+    user:
+      name: nagios 
+      group: nagcmd
+ 
+  - name: add apache to nagcmd group
+    user:
+      name: apache
+      group: nagcmd 
+     
+  - name: Download Nagios Core
+    get_url:
+      url: https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.3.tar.gz
+      dest: /home/ansible 
+    
+  - name: Download Plugins
+    get_url:
+      url: http://nagios-plugins.org/download/nagios-plugins-2.2.1.tar.gz
+      dest: /home/ansible
+  
+  - name: Extract Nagios archive
+    unarchive:
+      src: /home/ansible/nagios-4.4.3.tar.gz 
+      dest: /home/ansible
+      remote_src: yes 
+
+  - name: Extract Plugins archive
+    unarchive:
+      src: /home/ansible/nagios-plugins-2.2.1.tar.gz 
+      dest: /home/ansible
+      remote_src: yes    
+
+  - name: Configure and build Nagios
+    shell: "{{ item }}"
+    args:
+      chdir: "/home/ansible/nagios-4.4.3"
+    with_items:
+      - ./configure --with-command-group=nagcmd  
+      - make all 
+      - make install 
+      - make install-commandmode 
+      - make install-init 
+      - make install-config
+      - make install-webconf 
+     
+  - name: Configure and build Plugins
+    shell: "{{ item }}"
+    args:       
+      chdir: "/home/ansible/nagios-plugins-2.2.1"
+    with_items: 
+      - ./configure --with-nagios-user=nagios --with-nagios-group=nagios --with-openssl 
+      - make 
+      - make install  
+     
+  - name: Uncomment line 51 
+    lineinfile:
+      path: /usr/local/nagios/etc/nagios.cfg
+      regexp: '^#cfg_dir=/usr/local/nagios/etc/servers'
+      line: cfg_dir=/usr/local/nagios/etc/servers
+
+  - name: Config files directory 
+    file:
+      path: /usr/local/nagios/etc/servers
+      state: directory
+
+  - htpasswd:
+      path: /usr/local/nagios/etc/htpasswd.users 
+      name: nagiosadmin
+      password: 'password'
+      owner: nagios
+      group: nagcmd
+      mode: 0640    
+
+  - name: start and enable httpd service
+    service:
+      name: httpd
+      state: started
+      enabled: true
+
+  - name: start and enable  nagios
+    service: 
+      name: nagios 
+      state: started
+      enabled: true   

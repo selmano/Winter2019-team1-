@@ -1,0 +1,36 @@
+---
+# tasks file for repo_mirror
+  
+  - name: Install yum tools
+    yum: 
+      name: [ 'createrepo', 'yum-utils', 'p7zip' ]
+      state: latest
+     
+  - name: create local repo directory
+    file:
+      path: /var/ftp/repos
+      state: directory
+
+  - name: Extract pacakges from iso 
+    iso_extract:
+      image: /tmp/CentOS-7-x86_64-DVD-1810.iso
+      dest: /var/ftp//  
+      files: 
+      - Packages
+      - repo data
+  - name: Back up repo, delete online repo 
+    shell: "{{ item }}" 
+    args: 
+      chdir: /etc/
+    with_items: 
+      - cp -r yum.repos.d yum.repos.d-bak
+      - rm -rf yum.repos.d/*
+
+  - name: Make local repo file
+    yum_repository:
+        name: localrepo7
+        description: Local centos 7 DVD repository
+        baseurl: ftp://192.168.41.20/repos
+        enabled: yes
+        gpgcheck: no
+  

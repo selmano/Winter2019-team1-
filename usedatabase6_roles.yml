@@ -1,0 +1,9 @@
+---
+
+- name: usedatabase6_roles
+  hosts: dbserver6
+  user: ansible
+  become: true
+  roles: 
+    - database6
+

@@ -1,0 +1,25 @@
+---
+- name: Update Kernel
+  hosts: kernel
+  remote_user: ansible
+  become: yes
+
+  tasks:
+    - name: Add Kernel repository
+      yum_repository:
+        name: kernel
+        description: Kernel Repo
+        baseurl: http://mirror.centos.org/centos/7/updates/x86_64
+        gpgcheck: no
+        enabled: yes
+
+    - name: yum-clean-all
+      command: yum clean all
+      args:
+        warn: no
+
+    - name: Install Kernel
+      yum:
+        name: kernel
+        state: latest
+

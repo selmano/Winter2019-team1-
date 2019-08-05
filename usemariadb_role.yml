@@ -1,0 +1,13 @@
+---
+
+  - name: use mariadb role playbook
+    hosts: nagios
+    user: ansible
+    become: true
+
+        
+    roles:      
+      - mariadb
+
+
+

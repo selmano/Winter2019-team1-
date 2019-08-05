@@ -1,0 +1,21 @@
+---
+# tasks file for loadbalancers6
+
+- name: install haproxy
+  yum:
+    name: haproxy
+    state: latest
+- name: start and enable haproxy service
+  service:
+    name: haproxy
+    state: started
+    enabled: true
+- name: Install main configuration file
+  template:
+    src: haproxy.conf.j2
+    dest: "{{ haproxy_config }}"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart haproxy
+

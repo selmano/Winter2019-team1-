@@ -1,0 +1,12 @@
+---
+# handlers file for Dns_clients
+
+- name: restart NetworkManager
+  service:
+    name: NetworkManager
+    state: restarted
+
+- name: restart network
+  service:
+    name: network
+    state: restarted

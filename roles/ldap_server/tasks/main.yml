@@ -1,0 +1,32 @@
+---
+- name: template selinux file 
+  template:
+    src: selinux.j2
+    dest: /etc/selinux/config
+
+- name: install all initial packages 
+    yum:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+      - openldap
+      - openldap-clients
+      - openldap-servers
+      - openssl
+
+- name: start slapd service
+  service:
+    name: slpad
+    state: started
+
+- name: enable the slapd service
+      service:
+        name: slapd
+        enabled: yes
+
+- name: Set a password for the admin user 
+  ldap_passwd:
+   dn: cn=admin,dc=ziyotek1,dc=local
+   passwd: "{{ vault_secret }}"
+
+ 

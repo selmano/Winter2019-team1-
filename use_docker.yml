@@ -1,0 +1,7 @@
+---
+- name: use docker role playbook
+  hosts: dockerserver
+  user: ansible
+  become: true
+  roles:
+    - docker 

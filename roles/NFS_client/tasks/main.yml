@@ -1,0 +1,22 @@
+---
+- name: Install all initial packages
+  yum:
+    name: nfs-utils
+    state: latest
+
+- name: Showmount
+  command: "showmount -e prdx-nfs11.ziyotek1.local"
+    
+- name: Create share directory
+  file:
+    path: /clientshare
+    state: directory
+
+
+- name: mount the shared directories
+  command: "mount -t nfs prdx-nfs11.ziyotek1.local:/var/nfsshare /clientshare"
+
+- name: Mount at boot
+  lineinfile:
+    path: /etc/fstab
+    line: "prdx-nfs11.ziyotek1.local:/var/nfsshare /clientshare nfs rw,sync,hard,intr 0 0" 

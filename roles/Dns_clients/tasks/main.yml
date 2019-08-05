@@ -1,0 +1,16 @@
+---
+- name: template NetworkManager file
+  template:
+    src: NetworkManager.conf.j2
+    dest: /etc/NetworkManager/NetworkManager.conf
+  notify: restart NetworkManager
+
+- name: template dns file 
+  template:
+    src: resolv.conf.j2
+    dest: /etc/resolv.conf
+  notify: restart network
+
+
+
+

@@ -1,0 +1,9 @@
+---
+
+- name: use nagios_clients role 
+  hosts: all
+  user: ansible
+  become: true
+  roles:
+    - nagios_clients
+

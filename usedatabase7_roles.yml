@@ -1,0 +1,7 @@
+---
+- name: usedatabase7_roles
+  hosts: dbserver7
+  user: ansible
+  become: true
+  roles: 
+    - database7   
